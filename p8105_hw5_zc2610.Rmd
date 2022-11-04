@@ -8,10 +8,17 @@ output: github_document
 ```{r}
 library(tidyverse)
 ```
+# Problem 2
 
 ```{r}
 homicide_data_df = read_csv("./data/homicide-data.csv") %>% 
 janitor::clean_names()
 ```
+
+Raw data decription:
+
+1. This dataset contains `r nrow(homicide_data_df)` observations and `r ncol(homicide_data_df)` variables.
+
+2. Variables include : `r colnames(homicide_data_df)`
 
 
