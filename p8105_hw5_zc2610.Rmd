@@ -75,6 +75,17 @@ result_df %>%
   select(estimate,conf.low,conf.high)
 ```
 
+1. Estimate the proportion of homicides that are unsolved in each city
+
+```{r}
+  x = num_of_homicide_df %>%
+  pull(homicide_unsolved) 
+  n = num_of_homicide_df %>% 
+  pull(homicide_total) 
+ City_unsolved_homicide_df =  map2(x,n,prop.test)
+```
+
+
 
 
 
