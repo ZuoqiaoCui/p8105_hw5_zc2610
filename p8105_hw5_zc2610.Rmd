@@ -83,6 +83,8 @@ result_df %>%
   n = num_of_homicide_df %>% 
   pull(homicide_total) 
  City_unsolved_homicide_df =  map2(x,n,prop.test)
+ # Tidy hypothesis outputs of the dataframe
+ Tidy_city_unsolved_homicide_df = map(City_unsolved_homicide_df, broom::tidy)
 ```
 
 
