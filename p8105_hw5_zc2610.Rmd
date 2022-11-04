@@ -21,4 +21,15 @@ Raw data decription:
 
 2. Variables include : `r colnames(homicide_data_df)`
 
+Create a new variable "city_state" to combine city and state columns
+
+```{r}
+homicide_data_df = homicide_data_df %>% 
+  mutate(
+    city_state = str_c(city, state, sep = ",")
+  ) %>% 
+  select(-city,-state)
+```
+
+
 
