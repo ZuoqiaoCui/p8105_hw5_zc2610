@@ -47,18 +47,29 @@ homicide_data_df = homicide_data_df %>%
 Obtain the total number of homicides and the number of unsolved homicides 
 
 ```{r}
-homicide_data_df %>% 
+num_of_homicide_df = homicide_data_df %>% 
   group_by(city_state) %>% 
   summarise(
     homicide_total = n(),
     homicide_unsolved = sum(whether_solved == "unsolved")
-  )
-   
-  
-
-  
-
+  ) 
+num_of_homicide_df
 ```
+
+1. Estimate the proportion of homicides that are unsolved in Baltimore,MD and save the output of prop.test
+```{r}
+Baltimore_unsolved_homicide_df = num_of_homicide_df %>% 
+  filter(city_state == "Baltimore,MD")
+  x = Baltimore_unsolved_homicide_df %>%
+    pull(homicide_unsolved)  
+  n = Baltimore_unsolved_homicide_df %>%
+    pull(homicide_total)
+result_df = prop.test(x,n) %>% 
+  broom::tidy()
+```
+
+
+
 
 
 
