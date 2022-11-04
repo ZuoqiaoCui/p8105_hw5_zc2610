@@ -81,6 +81,8 @@ result_df %>%
 
 3. Create a new dataframe containing variables in num_of_homicide_df dataframe and two new variables: City_unsolved_homicide and Tidy_city_unsolved_homicide which include lists of hypothesis outputs
 
+4. Create a tidy dataframe with estimated proportions and CIs for each cit
+
 ```{r}
   x = num_of_homicide_df %>%
   pull(homicide_unsolved) 
@@ -91,7 +93,10 @@ result_df %>%
       City_unsolved_homicide =  map2(x,n,prop.test),
        # Tidy hypothesis outputs of the dataframe
       Tidy_city_unsolved_homicide = map(City_unsolved_homicide, broom::tidy)
-    ) 
+    ) %>% 
+    select(city_state,Tidy_city_unsolved_homicide)
+    unnest(hypothesis_result_df) %>% 
+    select(city_state,estimate,conf.low,conf.high)
 ```
 
 
