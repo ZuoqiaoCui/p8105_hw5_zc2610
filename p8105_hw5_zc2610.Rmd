@@ -1,0 +1,17 @@
+---
+title: "p8105_hw5_zc2610"
+author: "Zuoqiao Cui"
+date: "2022-11-04"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+homicide_data_df = read_csv("./data/homicide-data.csv") %>% 
+janitor::clean_names()
+```
+
+
