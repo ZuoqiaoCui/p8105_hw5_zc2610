@@ -126,6 +126,28 @@ tidy_hypothesis_result_df
   ggsave("./plots/Estimated_proportions_and_CIs_for_each_city.pdf",tidy_hypothesis_result_df, width = 8, height = 5)
 ```
 
+# Problem 3
+
+1. Create a function to output mu_hat and p.value of a normal distribution where n =30 and sigma(sd) = 5 arising from t-test
+```{r}
+set.seed(1)
+sim_estimate_pvalue = function(n = 30, mu, sd = 5){
+  simulation_data = tibble(
+    x = rnorm(n, mean = mu ,sd) #generate data from normal distribution
+  )
+  simulation_data %>% 
+    summarize(
+      mu_hat = t.test(x, conf.level = 0.95) %>%
+        broom::tidy() %>%
+        pull(estimate),
+      p_value = t.test(x, conf.level = 0.95) %>%
+        broom::tidy() %>%
+        pull(p.value)
+    )
+}
+```
+
+
 
 
 
