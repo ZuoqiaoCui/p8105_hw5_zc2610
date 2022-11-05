@@ -181,7 +181,24 @@ sim_results = sim_results %>%
       p_value >= 0.05 ~ "fail to reject"
     )
   )
+sim_results
 ```
+
+1. Count the number of total conclusions with each true mu
+2. Count the number of "reject" conclusions with each true mu
+3. Calculate the proportion of times the null was rejected
+```{r}
+sim_results %>% 
+  group_by(mu) %>% 
+  summarise(
+    conclusion_total = n(),
+    conclusion_reject = sum(conclusion == "reject")
+  ) %>% 
+  mutate(
+    proportion = conclusion_reject/conclusion_total
+  )
+```
+
 
 
 
