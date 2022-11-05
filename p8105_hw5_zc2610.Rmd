@@ -185,10 +185,14 @@ sim_results
 ```
 
 1. Count the number of total conclusions with each true mu
+
 2. Count the number of "reject" conclusions with each true mu
+
 3. Calculate the proportion of times the null was rejected
+
+4. Make a plot showing the proportion of times the null was rejected (the power of the test) on the y axis and the true value of μ on the x axis. 
 ```{r}
-sim_results %>% 
+proportion_reject = sim_results %>% 
   group_by(mu) %>% 
   summarise(
     conclusion_total = n(),
@@ -196,8 +200,29 @@ sim_results %>%
   ) %>% 
   mutate(
     proportion = conclusion_reject/conclusion_total
-  )
+  ) %>% 
+  ggplot(aes(x = mu, y = proportion, color = mu)) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "The association between effect size and power",
+     x = "True mu",
+     y = "Proportion of times the null was rejected"
+  ) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+proportion_reject
+
+ ggsave("./plots/The_association_between_effect_size_and_power.pdf",proportion_reject, width = 8, height = 5)
+
 ```
+
+Description:
+
+1. When the effect size (true mu) is increasing, the power of the test is increasing at the same time.
+
+2. When the effect size (true mu) is greater than 4, the power of the test is infinitely close to 1
+
 
 
 
