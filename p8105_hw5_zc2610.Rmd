@@ -146,7 +146,7 @@ sim_estimate_pvalue = function(n = 30, mu, sd = 5){
 }
 ```
 
-Set mu=0, generate 5000 datasets from the model x∼Normal[μ,σ] and save mu_hat and p.value arising from a test of H:μ=0 using α=0.05
+Set mu=0, generate 5000 datasets from the model x∼Normal[μ,σ] and save mu_hat and p.value arising from a test of H:μ=0 α=0.05 using a for loop
 
 ```{r}
 output = vector("list",length = 50)
@@ -155,6 +155,21 @@ for (i in 1:50){
 }
 bind_rows(output)
 ```
+
+Repeat the above for mu={1,2,3,4,5,6}
+
+```{r}
+sim_results = tibble(
+  mu = c(1,2,3,4,5,6)
+) %>% 
+  mutate(
+    output_lists = map(.x = mu,~rerun(50,sim_estimate_pvalue(30,.x,5))),
+    estimate_df = map(output_lists,bind_rows)
+  ) %>% 
+  select(-output_lists) %>% 
+  unnest(estimate_df) #expand the tibble list two show the two columns: mu and p_value
+```
+
 
 
 
