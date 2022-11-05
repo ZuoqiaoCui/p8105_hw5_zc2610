@@ -170,6 +170,20 @@ sim_results = tibble(
   unnest(estimate_df) #expand the tibble list two show the two columns: mu and p_value
 ```
 
+Create a new variable named conclusion to show whether the null hypothesis is rejected
+(since α=0.05, then p_value should be compared with 0.05 to determine whether the null hypothesis is rejected(when p_value < 0.05))
+
+```{r}
+sim_results = sim_results %>% 
+  mutate(
+    conclusion = case_when(
+      p_value < 0.05 ~ "reject",
+      p_value >= 0.05 ~ "fail to reject"
+    )
+  )
+```
+
+
 
 
 
