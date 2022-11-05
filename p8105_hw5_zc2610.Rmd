@@ -128,24 +128,34 @@ tidy_hypothesis_result_df
 
 # Problem 3
 
-1. Create a function to output mu_hat and p.value of a normal distribution where n =30 and sigma(sd) = 5 arising from t-test
+Create a function to output mu_hat and p.value of a normal distribution where n =30 and sigma(sd) = 5 arising from t-test
 ```{r}
-set.seed(1)
 sim_estimate_pvalue = function(n = 30, mu, sd = 5){
   simulation_data = tibble(
     x = rnorm(n, mean = mu ,sd) #generate data from normal distribution
   )
   simulation_data %>% 
     summarize(
-      mu_hat = t.test(x, conf.level = 0.95) %>%
+      mu_hat = t.test(x,conf.level = 0.95) %>%
         broom::tidy() %>%
         pull(estimate),
-      p_value = t.test(x, conf.level = 0.95) %>%
+      p_value = t.test(x,conf.level = 0.95) %>%
         broom::tidy() %>%
         pull(p.value)
     )
 }
 ```
+
+Set mu=0, generate 5000 datasets from the model x∼Normal[μ,σ] and save mu_hat and p.value arising from a test of H:μ=0 using α=0.05
+
+```{r}
+output = vector("list",length = 50)
+for (i in 1:50){
+  output[[i]] = sim_estimate_pvalue(30,0,5)
+}
+bind_rows(output)
+```
+
 
 
 
