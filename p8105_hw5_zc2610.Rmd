@@ -98,12 +98,18 @@ result_df %>%
     select(city_state,Tidy_city_unsolved_homicide)
     tidy_hypothesis_result_df = unnest(hypothesis_result_df) %>% 
     select(city_state,estimate,conf.low,conf.high)
+    tidy_hypothesis_result_df
 ```
 
-Create a plot that shows the estimates and CIs for each city 
+1. Create a plot that shows the estimates and CIs for each city 
+
+2. Organize cities according to the proportion of unsolved homicides and save the plot to a file folder.
 
 ```{r}
-tidy_hypothesis_result_df %>% 
+tidy_hypothesis_result_df = tidy_hypothesis_result_df %>% 
+  mutate(
+    city_state = fct_reorder(city_state, estimate)
+  ) %>% 
   ggplot(aes(x = city_state,y = estimate,color = city_state)) +
   geom_point() +
   geom_errorbar(aes(ymax = conf.high,ymin = conf.low)) +
@@ -113,7 +119,11 @@ tidy_hypothesis_result_df %>%
      y = "Estimated Proportion",
     caption = "Data from [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license]"
   ) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5),legend.position = "none") 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5),legend.position = "none")
+
+tidy_hypothesis_result_df
+
+  ggsave("./plots/Estimated_proportions_and_CIs_for_each_city.pdf",tidy_hypothesis_result_df, width = 8, height = 5)
 ```
 
 
