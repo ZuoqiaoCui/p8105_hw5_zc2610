@@ -223,6 +223,29 @@ Description:
 
 2. When the effect size (true mu) is greater than 4, the power of the test is infinitely close to 1
 
+Make a plot showing the average estimate of mu_hat on the y axis and the true value of μ on the x axis. 
+```{r}
+average_estimate_mu = sim_results %>% 
+  group_by(mu) %>% 
+  summarise(
+    average_mu_hat = mean(mu_hat)
+  ) %>% 
+  ggplot(aes(x = mu , y = average_mu_hat, color = mu )) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Average estimate of mu_hat vs True value of mu",
+     x = "True mu",
+     y = "The average estimate of mu_hat"
+  ) +
+  theme(plot.title = element_text(hjust = 0.5))
+
+average_estimate_mu
+
+ggsave("./plots/Average_estimate_of_mu_hat_vs_True_value_of_mu.pdf",average_estimate_mu, width = 8, height = 5)
+
+```
+
 
 
 
