@@ -149,8 +149,8 @@ sim_estimate_pvalue = function(n = 30, mu, sd = 5){
 Set mu=0, generate 5000 datasets from the model x∼Normal[μ,σ] and save mu_hat and p.value arising from a test of H:μ=0 α=0.05 using a for loop
 
 ```{r}
-output = vector("list",length = 50)
-for (i in 1:50){
+output = vector("list",length = 5000)
+for (i in 1:5000){
   output[[i]] = sim_estimate_pvalue(30,0,5)
 }
 bind_rows(output)
@@ -163,7 +163,7 @@ sim_results = tibble(
   mu = c(1,2,3,4,5,6)
 ) %>% 
   mutate(
-    output_lists = map(.x = mu,~rerun(50,sim_estimate_pvalue(30,.x,5))),
+    output_lists = map(.x = mu,~rerun(5000,sim_estimate_pvalue(30,.x,5))),
     estimate_df = map(output_lists,bind_rows)
   ) %>% 
   select(-output_lists) %>% 
@@ -245,6 +245,31 @@ average_estimate_mu
 ggsave("./plots/Average_estimate_of_mu_hat_vs_True_value_of_mu.pdf",average_estimate_mu, width = 8, height = 5)
 
 ```
+
+Make a second plot the average estimate of μ̂  only in samples for which the null was rejected on the y axis and the true value of μ on the x axis. 
+
+```{r}
+average_estimate_mu_reject = sim_results %>% 
+  filter(conclusion == "reject") %>% 
+  group_by(mu) %>% 
+  summarise(
+    average_mu_hat_reject = mean(mu_hat)
+  ) %>% 
+  ggplot(aes(x = mu , y = average_mu_hat_reject, color = mu )) +
+  geom_point() +
+  geom_line() +
+  labs(
+    title = "Average estimate of mu_hat vs True value of mu for 'rejected' samples",
+     x = "True mu",
+     y = "The average estimate of mu_hat"
+  ) +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+average_estimate_mu_reject
+
+ggsave("./plots/Average_estimate_of_mu_hat_vs_True_value_of_mu_for_reject_samples.pdf",average_estimate_mu, width = 8, height = 5)
+```
+
 
 
 
