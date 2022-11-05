@@ -7,6 +7,7 @@ output: github_document
 
 ```{r}
 library(tidyverse)
+library(ggplot2)
 ```
 # Problem 2
 
@@ -95,8 +96,24 @@ result_df %>%
       Tidy_city_unsolved_homicide = map(City_unsolved_homicide, broom::tidy)
     ) %>% 
     select(city_state,Tidy_city_unsolved_homicide)
-    unnest(hypothesis_result_df) %>% 
+    tidy_hypothesis_result_df = unnest(hypothesis_result_df) %>% 
     select(city_state,estimate,conf.low,conf.high)
+```
+
+Create a plot that shows the estimates and CIs for each city 
+
+```{r}
+tidy_hypothesis_result_df %>% 
+  ggplot(aes(x = city_state,y = estimate,color = city_state)) +
+  geom_point() +
+  geom_errorbar(aes(ymax = conf.high,ymin = conf.low)) +
+  labs(
+    title = "Estimated proportions and CIs of unsolved homicides in each city",
+     x = "City & State",
+     y = "Estimated Proportion",
+    caption = "Data from [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license]"
+  ) +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1),plot.title = element_text(hjust = 0.5),legend.position = "none") 
 ```
 
 
