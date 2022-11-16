@@ -8,6 +8,7 @@ output: github_document
 ```{r}
 library(tidyverse)
 library(ggplot2)
+library(patchwork)
 ```
 # Problem 1
 
@@ -127,7 +128,7 @@ result_df %>%
 
 1. Estimate the proportion of homicides that are unsolved in each city
 
-2. Tidy hypothesis outputs of the dataframe (Remove "Tulsa,AL" before making hypothesis test since there is no unsolved homicides in this city therefore CI and proportion don't need to be estimated )
+2. Tidy hypothesis outputs of the dataframe (Remove "Tulsa,AL" before making hypothesis test since there is no unsolved homicides and only one homicide in this city therefore CI and proportion don't need to be estimated )
 
 3. Create a new dataframe containing variables in num_of_homicide_df dataframe and two new variables: City_unsolved_homicide and Tidy_city_unsolved_homicide which include lists of hypothesis outputs
 
@@ -212,7 +213,7 @@ Repeat the above for mu={1,2,3,4,5,6}
 
 ```{r}
 sim_results = tibble(
-  mu = c(1,2,3,4,5,6)
+  mu = c(0,1,2,3,4,5,6)
 ) %>% 
   mutate(
     output_lists = map(.x = mu,~rerun(5000,sim_estimate_pvalue(30,.x,5))),
@@ -321,6 +322,15 @@ average_estimate_mu_reject
 
 ggsave("./plots/Average_estimate_of_mu_hat_vs_True_value_of_mu_for_reject_samples.pdf",average_estimate_mu, width = 8, height = 5)
 ```
+
+Combine the plot of all samples and the plot of "rejected" samples
+```{r}
+
+combine_plot = average_estimate_mu + average_estimate_mu_reject
+combine_plot
+ggsave("./plots/combine_plot.pdf",combine_plot, width = 8, height = 5)
+```
+
 
 Answer: 
 
