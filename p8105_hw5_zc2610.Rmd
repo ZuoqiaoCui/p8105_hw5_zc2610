@@ -201,8 +201,8 @@ sim_estimate_pvalue = function(n = 30, mu, sd = 5){
 Set mu=0, generate 5000 datasets from the model x∼Normal[μ,σ] and save mu_hat and p.value arising from a test of H:μ=0 α=0.05 using a for loop
 
 ```{r}
-output = vector("list",length = 50)
-for (i in 1:50){
+output = vector("list",length = 5000)
+for (i in 1:5000){
   output[[i]] = sim_estimate_pvalue(30,0,5)
 }
 bind_rows(output)
@@ -215,7 +215,7 @@ sim_results = tibble(
   mu = c(1,2,3,4,5,6)
 ) %>% 
   mutate(
-    output_lists = map(.x = mu,~rerun(50,sim_estimate_pvalue(30,.x,5))),
+    output_lists = map(.x = mu,~rerun(5000,sim_estimate_pvalue(30,.x,5))),
     estimate_df = map(output_lists,bind_rows)
   ) %>% 
   select(-output_lists) %>% 
@@ -328,6 +328,7 @@ Answer:
 
 2. When the true value of mu is from 4 to 6, the sample average of mu_hat across tests for which the null is rejected is approximately equal to the true value of mu
 
+3. The reason is that for random variables, if they are far away from mu = 0, they are more likely to be in the rejected area. If so, the average estimate of mu_hat will be closer to the true mu for "rejected" samples.
 
 
 
