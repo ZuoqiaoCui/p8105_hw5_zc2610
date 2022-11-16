@@ -9,6 +9,17 @@ output: github_document
 library(tidyverse)
 library(ggplot2)
 ```
+# Problem 1
+
+1. Imports the data in individual spreadsheets
+```{r}
+full_df = 
+  tibble(
+    files = list.files("data/problem1_data/"),
+    path = str_c("data/problem1_data/", files)
+  ) 
+```
+
 # Problem 2
 
 ```{r}
@@ -149,8 +160,8 @@ sim_estimate_pvalue = function(n = 30, mu, sd = 5){
 Set mu=0, generate 5000 datasets from the model x∼Normal[μ,σ] and save mu_hat and p.value arising from a test of H:μ=0 α=0.05 using a for loop
 
 ```{r}
-output = vector("list",length = 5000)
-for (i in 1:5000){
+output = vector("list",length = 50)
+for (i in 1:50){
   output[[i]] = sim_estimate_pvalue(30,0,5)
 }
 bind_rows(output)
@@ -163,7 +174,7 @@ sim_results = tibble(
   mu = c(1,2,3,4,5,6)
 ) %>% 
   mutate(
-    output_lists = map(.x = mu,~rerun(5000,sim_estimate_pvalue(30,.x,5))),
+    output_lists = map(.x = mu,~rerun(50,sim_estimate_pvalue(30,.x,5))),
     estimate_df = map(output_lists,bind_rows)
   ) %>% 
   select(-output_lists) %>% 
@@ -234,11 +245,11 @@ average_estimate_mu = sim_results %>%
   geom_point() +
   geom_line() +
   labs(
-    title = "Average estimate of mu_hat vs True value of mu",
+    title = "Average estimate of mu_hat vs True mu",
      x = "True mu",
      y = "The average estimate of mu_hat"
   ) +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),legend.position = "bottom")
 
 average_estimate_mu
 
@@ -259,16 +270,24 @@ average_estimate_mu_reject = sim_results %>%
   geom_point() +
   geom_line() +
   labs(
-    title = "Average estimate of mu_hat vs True value of mu for 'rejected' samples",
+    title = "Average estimate of mu_hat vs True mu for 'rejected' samples",
      x = "True mu",
      y = "The average estimate of mu_hat"
   ) +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),legend.position = "bottom")
   
 average_estimate_mu_reject
 
 ggsave("./plots/Average_estimate_of_mu_hat_vs_True_value_of_mu_for_reject_samples.pdf",average_estimate_mu, width = 8, height = 5)
 ```
+
+Answer: 
+
+1. When the true value of mu is from 1 to 3, the sample average of mu_hat across tests for which the null is rejected isn't approximately equal to the true value of mu
+
+2. When the true value of mu is from 4 to 6, the sample average of mu_hat across tests for which the null is rejected is approximately equal to the true value of mu
+
+
 
 
 
