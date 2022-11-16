@@ -13,13 +13,15 @@ library(ggplot2)
 
 1. Imports the data in individual spreadsheets
 2. Read all documents by path to obtain tibble
+3. show tibbles in data column
 ```{r}
 full_df = 
   tibble(
     files = list.files("data/problem1_data/"),
     path = str_c("data/problem1_data/", files)
   ) %>% 
-  mutate(data = map(path, read_csv)) 
+  mutate(data = map(path, read_csv)) %>% 
+  unnest()
 ```
 
 # Problem 2
