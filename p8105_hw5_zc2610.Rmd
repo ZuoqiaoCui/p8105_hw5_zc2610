@@ -52,6 +52,9 @@ tidy_df %>%
   facet_grid(~group)
 ```
 
+Comments:
+
+This plot suggests high within-files correlation -- files who start above average end up above average, and those that start below average end up below average. files in the control group generally don't change over time, but those in the experiment group increase their outcome in a roughly linear way. 
 
 
 # Problem 2
