@@ -12,12 +12,14 @@ library(ggplot2)
 # Problem 1
 
 1. Imports the data in individual spreadsheets
+2. Read all documents by path to obtain tibble
 ```{r}
 full_df = 
   tibble(
     files = list.files("data/problem1_data/"),
     path = str_c("data/problem1_data/", files)
-  ) 
+  ) %>% 
+  mutate(data = map(path, read_csv)) 
 ```
 
 # Problem 2
