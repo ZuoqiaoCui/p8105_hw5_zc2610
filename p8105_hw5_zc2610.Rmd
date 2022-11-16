@@ -124,15 +124,19 @@ result_df %>%
   select(estimate,conf.low,conf.high)
 ```
 
+
 1. Estimate the proportion of homicides that are unsolved in each city
 
-2. Tidy hypothesis outputs of the dataframe
+2. Tidy hypothesis outputs of the dataframe (Remove "Tulsa,AL" before making hypothesis test since there is no unsolved homicides in this city therefore CI and proportion don't need to be estimated )
 
 3. Create a new dataframe containing variables in num_of_homicide_df dataframe and two new variables: City_unsolved_homicide and Tidy_city_unsolved_homicide which include lists of hypothesis outputs
 
-4. Create a tidy dataframe with estimated proportions and CIs for each cit
+4. Create a tidy dataframe with estimated proportions and CIs for each city
+
 
 ```{r}
+num_of_homicide_df = num_of_homicide_df %>% 
+  filter(city_state != "Tulsa,AL")
   x = num_of_homicide_df %>%
   pull(homicide_unsolved) 
   n = num_of_homicide_df %>% 
