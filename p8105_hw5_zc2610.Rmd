@@ -42,6 +42,17 @@ tidy_df =
   select(-path) # remove path
 ```
 
+Make a plot showing each group
+
+```{r}
+tidy_df %>% 
+  ggplot(aes(x = week, y = outcome, color = group)) + 
+  geom_point() + 
+  geom_path() + 
+  facet_grid(~group)
+```
+
+
 
 # Problem 2
 
